@@ -1,0 +1,976 @@
+{
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "workbookDisplayName": {
+      "type": "string",
+      "defaultValue": "Cloudflare-git",
+      "metadata": {
+        "description": "The friendly name for the workbook that is used in the Gallery or Saved List.  This name must be unique within a resource group."
+      }
+    },
+    "workbookType": {
+      "type": "string",
+      "defaultValue": "sentinel",
+      "metadata": {
+        "description": "The gallery that the workbook will been shown under. Supported values include workbook, tsg, etc. Usually, this is 'workbook'"
+      }
+    },
+    "workbookSourceId": {
+      "type": "string",
+      "defaultValue": "/subscriptions/349df7b5-aeb9-47f7-bc87-06bf608690ea/resourcegroups/rg-testing/providers/microsoft.operationalinsights/workspaces/testing-la",
+      "metadata": {
+        "description": "The id of resource instance to which the workbook will be associated"
+      }
+    },
+    "workbookId": {
+      "type": "string",
+      "defaultValue": "[newGuid()]",
+      "metadata": {
+        "description": "The unique guid for this workbook instance"
+      }
+    }
+  },
+  "variables": {
+    "workbookContent": {
+      "version": "Notebook/1.0",
+      "items": [
+        {
+          "type": 1,
+          "content": {
+            "json": "**NOTE**: This workbook depends on a parser based on a Kusto Function to work as expected [**Cloudflare**](https://aka.ms/sentinel-CloudflareDataConnector-parse) which is deployed with the Azure Sentinel Solution."
+          },
+          "name": "text - 0"
+        },
+        {
+          "type": 11,
+          "content": {
+            "version": "LinkItem/1.0",
+            "style": "tabs",
+            "links": [
+              {
+                "id": "2088f290-65ee-4357-badb-55ce732a5004",
+                "cellValue": "tab",
+                "linkTarget": "parameter",
+                "linkLabel": "Cloudflare Web Traffic Overview",
+                "subTarget": "cloudflare_web_traffic_overview",
+                "style": "link"
+              },
+              {
+                "id": "25df6ee6-dcf7-4aa2-b90e-50f8a4b6548d",
+                "cellValue": "tab",
+                "linkTarget": "parameter",
+                "linkLabel": "Cloudflare Security Overview",
+                "subTarget": "cloudflare_security_overview",
+                "style": "link"
+              },
+              {
+                "id": "a2108bc6-5769-4c86-a5c0-201f531ed929",
+                "cellValue": "tab",
+                "linkTarget": "parameter",
+                "linkLabel": "Cloudflare Reliability Summary",
+                "subTarget": "cloudflare_reliability_summary",
+                "style": "link"
+              }
+            ]
+          },
+          "name": "links - 1"
+        },
+        {
+          "type": 9,
+          "content": {
+            "version": "KqlParameterItem/1.0",
+            "parameters": [
+              {
+                "id": "c64d5d3d-90c6-484a-ab88-c70652b75b6e",
+                "version": "KqlParameterItem/1.0",
+                "name": "TimeRange",
+                "type": 4,
+                "isRequired": true,
+                "value": {
+                  "durationMs": 172800000
+                },
+                "typeSettings": {
+                  "selectableValues": [
+                    {
+                      "durationMs": 300000
+                    },
+                    {
+                      "durationMs": 900000
+                    },
+                    {
+                      "durationMs": 1800000
+                    },
+                    {
+                      "durationMs": 3600000
+                    },
+                    {
+                      "durationMs": 14400000
+                    },
+                    {
+                      "durationMs": 43200000
+                    },
+                    {
+                      "durationMs": 86400000
+                    },
+                    {
+                      "durationMs": 172800000
+                    },
+                    {
+                      "durationMs": 259200000
+                    },
+                    {
+                      "durationMs": 604800000
+                    },
+                    {
+                      "durationMs": 1209600000
+                    },
+                    {
+                      "durationMs": 2419200000
+                    },
+                    {
+                      "durationMs": 2592000000
+                    },
+                    {
+                      "durationMs": 5184000000
+                    },
+                    {
+                      "durationMs": 7776000000
+                    }
+                  ],
+                  "allowCustom": true
+                },
+                "timeContext": {
+                  "durationMs": 86400000
+                }
+              }
+            ],
+            "style": "pills",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces"
+          },
+          "name": "parameters - 1"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL\n| summarize count() by ClientDeviceType_s",
+            "size": 0,
+            "title": "Traffic Type",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "piechart"
+          },
+          "customWidth": "25",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_web_traffic_overview"
+          },
+          "name": "Traffic Type"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL\n| summarize count() by ClientRequestProtocol_s",
+            "size": 0,
+            "title": "HTTP Protocols",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "piechart"
+          },
+          "customWidth": "25",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_web_traffic_overview"
+          },
+          "name": "HTTP Protocols"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL\n| summarize count() by ClientRequestMethod_s",
+            "size": 0,
+            "title": "Request Methods",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "piechart"
+          },
+          "customWidth": "25",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_web_traffic_overview"
+          },
+          "name": "Request Methods"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL\n| extend EdgeResponseContentType = iif(isempty(EdgeResponseContentType_s),\"empty\",EdgeResponseContentType_s )\n| summarize count() by EdgeResponseContentType",
+            "size": 0,
+            "title": "Content Types",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "piechart"
+          },
+          "customWidth": "25",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_web_traffic_overview"
+          },
+          "name": "Content Types"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL\n| summarize Count=count() by ClientRequestURI_s\n| sort by Count | project-rename ClientRequestURI=ClientRequestURI_s | take 50",
+            "size": 0,
+            "title": "Top Requested URIs",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "table"
+          },
+          "customWidth": "25",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_web_traffic_overview"
+          },
+          "name": "Top Requested URIs"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL\n| summarize Count=count() by ClientIP_s\n| sort by Count | take 50 | project-rename  ClientIP=ClientIP_s",
+            "size": 0,
+            "title": "Top Traffic IPs",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "table"
+          },
+          "customWidth": "25",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_web_traffic_overview"
+          },
+          "name": "Top Traffic IPs"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL\n| extend ClientRequestReferer = iif(isempty(ClientRequestReferer_s),\"empty\",ClientRequestReferer_s )\n| summarize Count=count() by ClientRequestReferer\n| sort by Count | take 50\n",
+            "size": 0,
+            "title": "Top Referer",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "table"
+          },
+          "customWidth": "25",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_web_traffic_overview"
+          },
+          "name": "Top Referer"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL\n| summarize Count=count() by ClientIPClass_s | project-rename ClientIPClass=ClientIPClass_s\n| sort by Count | take 50\n",
+            "size": 0,
+            "title": "Top Traffic Types",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "piechart"
+          },
+          "customWidth": "25",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_web_traffic_overview"
+          },
+          "name": "Top Traffic Types"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL\n| summarize Count=count() by ClientRequestUserAgent_s | project-rename ClientRequestUserAgent=ClientRequestUserAgent_s\n| sort by Count | take 50",
+            "size": 0,
+            "title": "Top User Agents",
+            "timeContext": {
+              "durationMs": 86400000
+            },
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "gridSettings": {
+              "formatters": [
+                {
+                  "columnMatch": "ClientRequestUserAgent",
+                  "formatter": 0,
+                  "formatOptions": {
+                    "customColumnWidthSetting": "75%"
+                  }
+                }
+              ]
+            }
+          },
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_web_traffic_overview"
+          },
+          "name": "Top User Agents"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "let total_number_of_requests =\nCloudflare_CL\n| summarize Count=count()\n| extend title=\"Total Number Of Requests\";\n\nlet threats_stopped =\nCloudflare_CL \n| extend threat=case(EdgePathingSrc_s ==\"user\" and EdgePathingOp_s == \"ban\" and EdgePathingStatus_s has \"ip\" ,\"IP Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\",\"Country Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ua\", \"Blocked User Agent\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc_s==\"bic\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ip\", \"Blocked Hotlink\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc_s==\"protect\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat) | summarize Count=count()\n| extend title=\"Stopped Threats\";\n\nlet result_table = union total_number_of_requests, threats_stopped; \nresult_table \n| sort by Count\n\n",
+            "size": 0,
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "tiles",
+            "tileSettings": {
+              "titleContent": {
+                "columnMatch": "title",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "Count",
+                "formatter": 12,
+                "formatOptions": {
+                  "palette": "auto"
+                },
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "maximumSignificantDigits": 3,
+                    "maximumFractionDigits": 2
+                  }
+                }
+              },
+              "showBorder": false,
+              "sortCriteriaField": "Count",
+              "sortOrderField": 2,
+              "size": "auto"
+            }
+          },
+          "customWidth": "33",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_security_overview"
+          },
+          "name": "Req_Threats_title"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL \n| extend threat=case(EdgePathingSrc_s ==\"user\" and EdgePathingOp_s == \"ban\" and EdgePathingStatus_s has \"ip\" ,\"IP Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\",\"Country Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ua\", \"Blocked User Agent\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc_s==\"bic\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ip\", \"Blocked Hotlink\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc_s==\"protect\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize Count=count() by threat",
+            "size": 0,
+            "title": "Top Threats",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "categoricalbar",
+            "tileSettings": {
+              "titleContent": {
+                "columnMatch": "title",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "Count",
+                "formatter": 12,
+                "formatOptions": {
+                  "palette": "auto"
+                },
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "maximumSignificantDigits": 3,
+                    "maximumFractionDigits": 2
+                  }
+                }
+              },
+              "showBorder": false,
+              "sortCriteriaField": "Count",
+              "sortOrderField": 2,
+              "size": "auto"
+            }
+          },
+          "customWidth": "33",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_security_overview"
+          },
+          "name": "Top Threats"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "let total_number_of_requests =\nCloudflare_CL\n| summarize Count=count()\n| extend title=\"Total Number Of Requests\";\n\nlet threats_stopped =\nCloudflare_CL \n| extend threat=case(EdgePathingSrc_s ==\"user\" and EdgePathingOp_s == \"ban\" and EdgePathingStatus_s has \"ip\" ,\"IP Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\",\"Country Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ua\", \"Blocked User Agent\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc_s==\"bic\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ip\", \"Blocked Hotlink\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc_s==\"protect\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat) | summarize Count=count()\n| extend title=\"Stopped Threats\";\n\nlet result_table = union total_number_of_requests, threats_stopped; \nresult_table \n| sort by Count\n\n",
+            "size": 0,
+            "title": "Requests vs Threats",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "piechart",
+            "tileSettings": {
+              "titleContent": {
+                "columnMatch": "title",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "Count",
+                "formatter": 12,
+                "formatOptions": {
+                  "palette": "auto"
+                },
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "maximumSignificantDigits": 3,
+                    "maximumFractionDigits": 2
+                  }
+                }
+              },
+              "showBorder": false,
+              "sortCriteriaField": "Count",
+              "sortOrderField": 2,
+              "size": "auto"
+            }
+          },
+          "customWidth": "33",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_security_overview"
+          },
+          "name": "Requests vs Threats"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL \n| extend threat=case(EdgePathingSrc_s ==\"user\" and EdgePathingOp_s == \"ban\" and EdgePathingStatus_s has \"ip\" ,\"IP Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\",\"Country Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ua\", \"Blocked User Agent\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc_s==\"bic\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ip\", \"Blocked Hotlink\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc_s==\"protect\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| make-series Trend = count() on TimeGenerated from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain};",
+            "size": 0,
+            "title": "Threats Over Time",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "timechart",
+            "tileSettings": {
+              "titleContent": {
+                "columnMatch": "title",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "Count",
+                "formatter": 12,
+                "formatOptions": {
+                  "palette": "auto"
+                },
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "maximumSignificantDigits": 3,
+                    "maximumFractionDigits": 2
+                  }
+                }
+              },
+              "showBorder": false,
+              "sortCriteriaField": "Count",
+              "sortOrderField": 2,
+              "size": "auto"
+            }
+          },
+          "customWidth": "33",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_security_overview"
+          },
+          "name": "Threats Over Time"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL \n| extend threat=case(EdgePathingSrc_s ==\"user\" and EdgePathingOp_s == \"ban\" and EdgePathingStatus_s has \"ip\" ,\"IP Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\",\"Country Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ua\", \"Blocked User Agent\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc_s==\"bic\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ip\", \"Blocked Hotlink\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc_s==\"protect\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize count() by ClientCountry_s | project-rename Country=ClientCountry_s | take 20",
+            "size": 0,
+            "title": "Top Threat Countries",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "table",
+            "tileSettings": {
+              "titleContent": {
+                "columnMatch": "title",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "Count",
+                "formatter": 12,
+                "formatOptions": {
+                  "palette": "auto"
+                },
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "maximumSignificantDigits": 3,
+                    "maximumFractionDigits": 2
+                  }
+                }
+              },
+              "showBorder": false,
+              "sortCriteriaField": "Count",
+              "sortOrderField": 2,
+              "size": "auto"
+            }
+          },
+          "customWidth": "33",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_security_overview"
+          },
+          "name": "Top Threat Countries"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL \n| extend threat=case(EdgePathingSrc_s ==\"user\" and EdgePathingOp_s == \"ban\" and EdgePathingStatus_s has \"ip\" ,\"IP Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\",\"Country Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ua\", \"Blocked User Agent\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc_s==\"bic\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ip\", \"Blocked Hotlink\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc_s==\"protect\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize count() by ClientIP_s | project-rename ClientIP=ClientIP_s",
+            "size": 0,
+            "title": "Top Threat Client IPs",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "table",
+            "tileSettings": {
+              "titleContent": {
+                "columnMatch": "title",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "Count",
+                "formatter": 12,
+                "formatOptions": {
+                  "palette": "auto"
+                },
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "maximumSignificantDigits": 3,
+                    "maximumFractionDigits": 2
+                  }
+                }
+              },
+              "showBorder": false,
+              "sortCriteriaField": "Count",
+              "sortOrderField": 2,
+              "size": "auto"
+            }
+          },
+          "customWidth": "33",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_security_overview"
+          },
+          "name": "Top Threat Client IPs"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL \n| extend threat=case(EdgePathingSrc_s ==\"user\" and EdgePathingOp_s == \"ban\" and EdgePathingStatus_s has \"ip\" ,\"IP Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\",\"Country Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ua\", \"Blocked User Agent\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc_s==\"bic\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ip\", \"Blocked Hotlink\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc_s==\"protect\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize Count=count() by ClientRequestURI_s | project-rename ClientRequestURI=ClientRequestURI_s",
+            "size": 0,
+            "title": "Top Threat URIs",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "table",
+            "tileSettings": {
+              "titleContent": {
+                "columnMatch": "title",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "Count",
+                "formatter": 12,
+                "formatOptions": {
+                  "palette": "auto"
+                },
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "maximumSignificantDigits": 3,
+                    "maximumFractionDigits": 2
+                  }
+                }
+              },
+              "showBorder": false,
+              "sortCriteriaField": "Count",
+              "sortOrderField": 2,
+              "size": "auto"
+            }
+          },
+          "customWidth": "33",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_security_overview"
+          },
+          "name": "Top Threat URIs"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL \n| extend threat=case(EdgePathingSrc_s ==\"user\" and EdgePathingOp_s == \"ban\" and EdgePathingStatus_s has \"ip\" ,\"IP Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\",\"Country Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ua\", \"Blocked User Agent\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc_s==\"bic\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ip\", \"Blocked Hotlink\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc_s==\"protect\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize Count=count() by ClientRequestUserAgent_s | project-rename ClientRequestUserAgent=ClientRequestUserAgent_s",
+            "size": 0,
+            "title": "Top Threat User Agents",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "table",
+            "tileSettings": {
+              "titleContent": {
+                "columnMatch": "title",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "Count",
+                "formatter": 12,
+                "formatOptions": {
+                  "palette": "auto"
+                },
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "maximumSignificantDigits": 3,
+                    "maximumFractionDigits": 2
+                  }
+                }
+              },
+              "showBorder": false,
+              "sortCriteriaField": "Count",
+              "sortOrderField": 2,
+              "size": "auto"
+            }
+          },
+          "customWidth": "33",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_security_overview"
+          },
+          "name": "Top Threat User Agents"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL \n| extend threat=case(EdgePathingSrc_s ==\"user\" and EdgePathingOp_s == \"ban\" and EdgePathingStatus_s has \"ip\" ,\"IP Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\",\"Country Block\",EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ua\", \"Blocked User Agent\", EdgePathingSrc_s==\"user\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc_s==\"filterBasedFirewall\" and EdgePathingOp_s==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc_s==\"bic\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc_s==\"hot\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"ip\", \"Blocked Hotlink\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc_s==\"macro\" and EdgePathingOp_s==\"chl\" and EdgePathingStatus_s==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc_s==\"protect\" and EdgePathingOp_s==\"ban\" and EdgePathingStatus_s==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize Count=count() by EdgePathingStatus_s | project-rename EdgePathingStatus=EdgePathingStatus_s",
+            "size": 0,
+            "title": "Top Threat User Agents",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "table",
+            "tileSettings": {
+              "titleContent": {
+                "columnMatch": "title",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "Count",
+                "formatter": 12,
+                "formatOptions": {
+                  "palette": "auto"
+                },
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "maximumSignificantDigits": 3,
+                    "maximumFractionDigits": 2
+                  }
+                }
+              },
+              "showBorder": false,
+              "sortCriteriaField": "Count",
+              "sortOrderField": 2,
+              "size": "auto"
+            }
+          },
+          "customWidth": "33",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_security_overview"
+          },
+          "name": "Top Threat User Agents - Copy"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "let 5xx = Cloudflare_CL \n| where tostring(EdgeResponseStatus_d) startswith \"5\"\n| summarize Count=count()\n| extend title=\"5xx Errors (Edge)\";\n\nlet 4xx = Cloudflare_CL \n| where tostring(EdgeResponseStatus_d) startswith \"4\"\n| summarize Count=count()\n| extend title=\"4xx Errors (Edge)\";\n\nlet 3xx = Cloudflare_CL \n| where tostring(EdgeResponseStatus_d) startswith \"3\"\n| summarize Count=count()\n| extend title=\"3xx Errors (Edge)\";\n\nlet result_table = union 5xx, 4xx, 3xx; \nresult_table \n| sort by Count\n\n",
+            "size": 0,
+            "title": "ERRORS Counts (Edge)",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "tiles",
+            "tileSettings": {
+              "showBorder": false,
+              "titleContent": {
+                "columnMatch": "title",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "Count",
+                "formatter": 12,
+                "formatOptions": {
+                  "palette": "auto"
+                },
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "maximumSignificantDigits": 3,
+                    "maximumFractionDigits": 2
+                  }
+                }
+              }
+            }
+          },
+          "customWidth": "33",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_reliability_summary"
+          },
+          "name": "Errors (Edge)"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL \n| extend response_error_type= case(tostring(EdgeResponseStatus_d) startswith \"2\" , \"2xx\", tostring(EdgeResponseStatus_d) startswith \"3\" , \"3xx\", tostring(EdgeResponseStatus_d) startswith \"4\" , \"4xx\", tostring(EdgeResponseStatus_d) startswith \"5\" , \"5xx\",\"\")\n| where isnotempty(response_error_type)\n| summarize Count=count() by response_error_type",
+            "size": 0,
+            "title": "Edge Response Error Ratio",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "piechart",
+            "tileSettings": {
+              "showBorder": false,
+              "titleContent": {
+                "columnMatch": "title",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "Count",
+                "formatter": 12,
+                "formatOptions": {
+                  "palette": "auto"
+                },
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "maximumSignificantDigits": 3,
+                    "maximumFractionDigits": 2
+                  }
+                }
+              }
+            }
+          },
+          "customWidth": "33",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_reliability_summary"
+          },
+          "name": "Edge Response Error Ratio"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL \n| extend response_error_type= case(tostring(OriginResponseStatus_d) startswith \"2\" , \"2xx\", tostring(OriginResponseStatus_d) startswith \"3\" , \"3xx\", tostring(OriginResponseStatus_d) startswith \"4\" , \"4xx\", tostring(OriginResponseStatus_d) startswith \"5\" , \"5xx\",\"\")\n| where isnotempty(response_error_type)\n| summarize Count=count() by response_error_type",
+            "size": 0,
+            "title": "Origin Response Error Ratio",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "piechart",
+            "tileSettings": {
+              "showBorder": false,
+              "titleContent": {
+                "columnMatch": "title",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "Count",
+                "formatter": 12,
+                "formatOptions": {
+                  "palette": "auto"
+                },
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "maximumSignificantDigits": 3,
+                    "maximumFractionDigits": 2
+                  }
+                }
+              }
+            }
+          },
+          "customWidth": "33",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_reliability_summary"
+          },
+          "name": "Origin Response Error Ratio"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL \n| extend response_error_type= case(tostring(EdgeResponseStatus_d) startswith \"2\" , \"2xx\", tostring(EdgeResponseStatus_d) startswith \"3\" , \"3xx\", tostring(EdgeResponseStatus_d) startswith \"4\" , \"4xx\", tostring(EdgeResponseStatus_d) startswith \"5\" , \"5xx\",\"\")\n| where isnotempty(response_error_type)\n| make-series Trend = count() on TimeGenerated from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain} by response_error_type;",
+            "size": 0,
+            "title": "Edge Response Status Over Time",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "timechart",
+            "tileSettings": {
+              "showBorder": false,
+              "titleContent": {
+                "columnMatch": "title",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "Count",
+                "formatter": 12,
+                "formatOptions": {
+                  "palette": "auto"
+                },
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "maximumSignificantDigits": 3,
+                    "maximumFractionDigits": 2
+                  }
+                }
+              }
+            }
+          },
+          "customWidth": "50",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_reliability_summary"
+          },
+          "name": "Edge Response Status Over Time"
+        },
+        {
+          "type": 3,
+          "content": {
+            "version": "KqlItem/1.0",
+            "query": "Cloudflare_CL \n| extend response_error_type= case(tostring(OriginResponseStatus_d) startswith \"2\" , \"2xx\", tostring(OriginResponseStatus_d) startswith \"3\" , \"3xx\", tostring(OriginResponseStatus_d) startswith \"4\" , \"4xx\", tostring(OriginResponseStatus_d) startswith \"5\" , \"5xx\",\"\")\n| where isnotempty(response_error_type)\n| make-series Trend = count() on TimeGenerated from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain} by response_error_type;",
+            "size": 0,
+            "title": "Origin Response Status Over Time",
+            "timeContextFromParameter": "TimeRange",
+            "queryType": 0,
+            "resourceType": "microsoft.operationalinsights/workspaces",
+            "visualization": "timechart",
+            "tileSettings": {
+              "showBorder": false,
+              "titleContent": {
+                "columnMatch": "title",
+                "formatter": 1
+              },
+              "leftContent": {
+                "columnMatch": "Count",
+                "formatter": 12,
+                "formatOptions": {
+                  "palette": "auto"
+                },
+                "numberFormat": {
+                  "unit": 17,
+                  "options": {
+                    "maximumSignificantDigits": 3,
+                    "maximumFractionDigits": 2
+                  }
+                }
+              }
+            }
+          },
+          "customWidth": "50",
+          "conditionalVisibility": {
+            "parameterName": "tab",
+            "comparison": "isEqualTo",
+            "value": "cloudflare_reliability_summary"
+          },
+          "name": "Origin Response Status Over Time"
+        }
+      ],
+      "isLocked": false,
+      "fallbackResourceIds": [
+        "/subscriptions/349df7b5-aeb9-47f7-bc87-06bf608690ea/resourcegroups/rg-testing/providers/microsoft.operationalinsights/workspaces/testing-la"
+      ],
+      "fromTemplateId": "sentinel-CloudflareWorkbook"
+    }
+  },
+  "resources": [
+    {
+      "name": "[parameters('workbookId')]",
+      "type": "microsoft.insights/workbooks",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2021-03-08",
+      "dependsOn": [],
+      "kind": "shared",
+      "properties": {
+        "displayName": "[parameters('workbookDisplayName')]",
+        "serializedData": "[string(variables('workbookContent'))]",
+        "version": "1.0",
+        "sourceId": "[parameters('workbookSourceId')]",
+        "category": "[parameters('workbookType')]"
+      }
+    }
+  ],
+  "outputs": {
+    "workbookId": {
+      "type": "string",
+      "value": "[resourceId( 'microsoft.insights/workbooks', parameters('workbookId'))]"
+    }
+  },
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#"
+}
